@@ -7,45 +7,32 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            padding: 20px;
-            text-align: center;
-        }
-        h1 {
-            color: #333;
+            margin: 20px;
         }
         input, select {
-            padding: 10px;
             margin: 10px 0;
+            padding: 10px;
             width: 200px;
         }
         button {
             padding: 10px 15px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
             cursor: pointer;
         }
-        button:hover {
-            background-color: #45a049;
-        }
-        .result {
+        #result {
             margin-top: 20px;
-            font-size: 1.2em;
-            color: #333;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
-
     <h1>Convertisseur de Notes</h1>
-    <label for="note">Entrez votre note (ex: 8/75):</label>
+    <label for="note">Entrez votre note (ex: 8/75) :</label>
     <input type="text" id="note" placeholder="8/75">
     
-    <label for="maxValue">Valeur maximale du système actuel:</label>
+    <label for="maxValue">Valeur maximale du système actuel :</label>
     <input type="number" id="maxValue" placeholder="75">
     
-    <label for="targetSystem">Système de notation cible:</label>
+    <label for="targetSystem">Système de notation cible :</label>
     <select id="targetSystem">
         <option value="20">Sur 20</option>
         <option value="10">Sur 10</option>
@@ -55,52 +42,45 @@
     
     <button onclick="convertNote()">Convertir</button>
     
-    <div class="result" id="result"></div>
+    <div id="result"></div>
 
     <script>
         function convertNote() {
             const noteInput = document.getElementById('note').value;
             const maxValue = parseFloat(document.getElementById('maxValue').value);
             const targetSystem = document.getElementById('targetSystem').value;
-            const resultDiv = document.getElementById('result');
 
-            // Vérification de la validité de l'entrée
-            if (!noteInput.includes('/') || isNaN(maxValue)) {
-                resultDiv.innerHTML = "Veuillez entrer une note valide et une valeur maximale.";
-                return;
-            }
-
+            // Extraire le numérateur et le dénominateur de la note
             const [numerator, denominator] = noteInput.split('/').map(Number);
-            if (denominator !== maxValue) {
-                resultDiv.innerHTML = "La valeur maximale ne correspond pas au dénominateur de la fraction.";
+
+            if (isNaN(numerator) || isNaN(denominator) || isNaN(maxValue)) {
+                document.getElementById('result').innerText = "Veuillez entrer des valeurs valides.";
                 return;
             }
 
-            // Calcul de la note sur 100
-            const scoreOutOf100 = (numerator / denominator) * 100;
+            // Calculer la note sur 100
+            const noteSur100 = (numerator / denominator) * 100;
 
-            let convertedScore;
+            let convertedNote;
             switch (targetSystem) {
                 case '20':
-                    convertedScore = (scoreOutOf100 / 100) * 20;
-                    resultDiv.innerHTML = `Note convertie: ${convertedScore.toFixed(2)} / 20`;
+                    convertedNote = (noteSur100 / 100) * 20;
                     break;
                 case '10':
-                    convertedScore = (scoreOutOf100 / 100) * 10;
-                    resultDiv.innerHTML = `Note convertie: ${convertedScore.toFixed(2)} / 10`;
+                    convertedNote = (noteSur100 / 100) * 10;
                     break;
                 case 'percentage':
-                    resultDiv.innerHTML = `Note convertie: ${scoreOutOf100.toFixed(2)} %`;
+                    convertedNote = noteSur100;
                     break;
                 case 'gpa':
-                    convertedScore = (scoreOutOf100 / 100) * 4;
-                    resultDiv.innerHTML = `Note convertie: ${convertedScore.toFixed(2)} / 4`;
+                    convertedNote = (noteSur100 / 100) * 4;
                     break;
                 default:
-                    resultDiv.innerHTML = "Système de notation non reconnu.";
+                    convertedNote = "Système de notation non reconnu.";
             }
+
+            document.getElementById('result').innerText = `Note convertie : ${convertedNote.toFixed(2)}`;
         }
     </script>
-
 </body>
 </html>

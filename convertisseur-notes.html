@@ -64,7 +64,6 @@
             const targetSystem = document.getElementById('targetSystem').value;
             const resultDiv = document.getElementById('result');
 
-            // Vérification de la validité de l'entrée
             if (!noteInput.includes('/') || isNaN(maxValue)) {
                 resultDiv.innerHTML = "Veuillez entrer une note valide et une valeur maximale.";
                 return;
@@ -76,7 +75,6 @@
                 return;
             }
 
-            // Calcul de la note sur 100
             const scoreOutOf100 = (numerator / denominator) * 100;
 
             let convertedScore;
@@ -103,4 +101,5 @@
     </script>
 
 </body>
+
 </html>
